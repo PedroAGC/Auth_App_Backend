@@ -3,6 +3,7 @@ import express, {Application} from 'express';
 import cors from 'cors';
 
 import loginRoutes from '../routes/login.routes';
+import dbConnection from '../database/config';
 
 class Server {
     private app : Application;
@@ -16,6 +17,9 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '2000';
 
+        //  DB Connection
+        this.dbConnect()
+
         //  Middlewares
         this.middlewares();
 
@@ -23,6 +27,10 @@ class Server {
         this.routes();
 
     }
+
+    async dbConnect(){
+        await dbConnection();
+    }    
 
     middlewares(){
         this.app.use(cors());
@@ -35,7 +43,7 @@ class Server {
 
     listen(){
         this.app.listen(this.port, () => {
-            console.log(`Servidor corriendo en el puerto ${this.port}`);
+            console.log(`Server running in the Port: ${this.port}`);
         })
     }
 
